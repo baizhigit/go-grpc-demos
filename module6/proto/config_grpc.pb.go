@@ -20,6 +20,7 @@ const _ = grpc.SupportPackageIsVersion9
 
 const (
 	ConfigService_LongRunning_FullMethodName = "/config.ConfigService/LongRunning"
+	ConfigService_Flaky_FullMethodName       = "/config.ConfigService/Flaky"
 )
 
 // ConfigServiceClient is the client API for ConfigService service.
@@ -27,6 +28,7 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ConfigServiceClient interface {
 	LongRunning(ctx context.Context, in *LongRunningRequest, opts ...grpc.CallOption) (*LongRunningResponse, error)
+	Flaky(ctx context.Context, in *FlakyRequest, opts ...grpc.CallOption) (*FlakyResponse, error)
 }
 
 type configServiceClient struct {
@@ -47,11 +49,22 @@ func (c *configServiceClient) LongRunning(ctx context.Context, in *LongRunningRe
 	return out, nil
 }
 
+func (c *configServiceClient) Flaky(ctx context.Context, in *FlakyRequest, opts ...grpc.CallOption) (*FlakyResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(FlakyResponse)
+	err := c.cc.Invoke(ctx, ConfigService_Flaky_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ConfigServiceServer is the server API for ConfigService service.
 // All implementations must embed UnimplementedConfigServiceServer
 // for forward compatibility.
 type ConfigServiceServer interface {
 	LongRunning(context.Context, *LongRunningRequest) (*LongRunningResponse, error)
+	Flaky(context.Context, *FlakyRequest) (*FlakyResponse, error)
 	mustEmbedUnimplementedConfigServiceServer()
 }
 
@@ -64,6 +77,9 @@ type UnimplementedConfigServiceServer struct{}
 
 func (UnimplementedConfigServiceServer) LongRunning(context.Context, *LongRunningRequest) (*LongRunningResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method LongRunning not implemented")
+}
+func (UnimplementedConfigServiceServer) Flaky(context.Context, *FlakyRequest) (*FlakyResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method Flaky not implemented")
 }
 func (UnimplementedConfigServiceServer) mustEmbedUnimplementedConfigServiceServer() {}
 func (UnimplementedConfigServiceServer) testEmbeddedByValue()                       {}
@@ -104,6 +120,24 @@ func _ConfigService_LongRunning_Handler(srv interface{}, ctx context.Context, de
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ConfigService_Flaky_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(FlakyRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ConfigServiceServer).Flaky(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ConfigService_Flaky_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ConfigServiceServer).Flaky(ctx, req.(*FlakyRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // ConfigService_ServiceDesc is the grpc.ServiceDesc for ConfigService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -114,6 +148,10 @@ var ConfigService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "LongRunning",
 			Handler:    _ConfigService_LongRunning_Handler,
+		},
+		{
+			MethodName: "Flaky",
+			Handler:    _ConfigService_Flaky_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

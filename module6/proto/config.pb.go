@@ -93,15 +93,90 @@ func (*LongRunningResponse) Descriptor() ([]byte, []int) {
 	return file_proto_config_proto_rawDescGZIP(), []int{1}
 }
 
+type FlakyRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *FlakyRequest) Reset() {
+	*x = FlakyRequest{}
+	mi := &file_proto_config_proto_msgTypes[2]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *FlakyRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*FlakyRequest) ProtoMessage() {}
+
+func (x *FlakyRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_config_proto_msgTypes[2]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use FlakyRequest.ProtoReflect.Descriptor instead.
+func (*FlakyRequest) Descriptor() ([]byte, []int) {
+	return file_proto_config_proto_rawDescGZIP(), []int{2}
+}
+
+type FlakyResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *FlakyResponse) Reset() {
+	*x = FlakyResponse{}
+	mi := &file_proto_config_proto_msgTypes[3]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *FlakyResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*FlakyResponse) ProtoMessage() {}
+
+func (x *FlakyResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_config_proto_msgTypes[3]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use FlakyResponse.ProtoReflect.Descriptor instead.
+func (*FlakyResponse) Descriptor() ([]byte, []int) {
+	return file_proto_config_proto_rawDescGZIP(), []int{3}
+}
+
 var File_proto_config_proto protoreflect.FileDescriptor
 
 const file_proto_config_proto_rawDesc = "" +
 	"\n" +
 	"\x12proto/config.proto\x12\x06config\"\x14\n" +
 	"\x12LongRunningRequest\"\x15\n" +
-	"\x13LongRunningResponse2W\n" +
+	"\x13LongRunningResponse\"\x0e\n" +
+	"\fFlakyRequest\"\x0f\n" +
+	"\rFlakyResponse2\x8d\x01\n" +
 	"\rConfigService\x12F\n" +
-	"\vLongRunning\x12\x1a.config.LongRunningRequest\x1a\x1b.config.LongRunningResponseB2Z0github.com/baizhigit/go-grpc-demos/module6/protob\x06proto3"
+	"\vLongRunning\x12\x1a.config.LongRunningRequest\x1a\x1b.config.LongRunningResponse\x124\n" +
+	"\x05Flaky\x12\x14.config.FlakyRequest\x1a\x15.config.FlakyResponseB2Z0github.com/baizhigit/go-grpc-demos/module6/protob\x06proto3"
 
 var (
 	file_proto_config_proto_rawDescOnce sync.Once
@@ -115,16 +190,20 @@ func file_proto_config_proto_rawDescGZIP() []byte {
 	return file_proto_config_proto_rawDescData
 }
 
-var file_proto_config_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
+var file_proto_config_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
 var file_proto_config_proto_goTypes = []any{
 	(*LongRunningRequest)(nil),  // 0: config.LongRunningRequest
 	(*LongRunningResponse)(nil), // 1: config.LongRunningResponse
+	(*FlakyRequest)(nil),        // 2: config.FlakyRequest
+	(*FlakyResponse)(nil),       // 3: config.FlakyResponse
 }
 var file_proto_config_proto_depIdxs = []int32{
 	0, // 0: config.ConfigService.LongRunning:input_type -> config.LongRunningRequest
-	1, // 1: config.ConfigService.LongRunning:output_type -> config.LongRunningResponse
-	1, // [1:2] is the sub-list for method output_type
-	0, // [0:1] is the sub-list for method input_type
+	2, // 1: config.ConfigService.Flaky:input_type -> config.FlakyRequest
+	1, // 2: config.ConfigService.LongRunning:output_type -> config.LongRunningResponse
+	3, // 3: config.ConfigService.Flaky:output_type -> config.FlakyResponse
+	2, // [2:4] is the sub-list for method output_type
+	0, // [0:2] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name
 	0, // [0:0] is the sub-list for extension extendee
 	0, // [0:0] is the sub-list for field type_name
@@ -141,7 +220,7 @@ func file_proto_config_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_proto_config_proto_rawDesc), len(file_proto_config_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   2,
+			NumMessages:   4,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

@@ -18,8 +18,14 @@ func main() {
 		MethodConfig: []config.MethodConfig{{
 			Name: []config.NameConfig{{
 				Service: "config.ConfigService",
-				Method:  "LongRunning",
 			}},
+			RetryPolicy: &config.RetryPolicy{
+				MaxAttempts:          4,
+				InitialBackoff:       "1s",
+				MaxBackoff:           "10s",
+				BackoffMultiplier:    2,
+				RetryableStatusCodes: []string{"INTERNAL", "UNAVAILABLE"},
+			},
 			Timeout: "10s",
 		}},
 	}
@@ -36,7 +42,7 @@ func main() {
 
 	client := proto.NewConfigServiceClient(conn)
 
-	_, err = client.LongRunning(ctx, &proto.LongRunningRequest{})
+	_, err = client.Flaky(ctx, &proto.FlakyRequest{})
 	if err != nil {
 		log.Fatal(err)
 	}
