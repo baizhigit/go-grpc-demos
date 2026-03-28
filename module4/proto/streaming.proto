@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package streaming;
 
-option go_package = "github.com/baizhigit/go-grpc-demos/module3/proto";
+option go_package = "github.com/baizhigit/go-grpc-demos/module4/proto";
 
 // FileUploadService is a simple file-sharing service to demonstrate different types of streaming.
 service FileUploadService {

@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package interceptor;
 
-option go_package = "github.com/baizhigit/go-grpc-demos/module3/proto";
+option go_package = "github.com/baizhigit/go-grpc-demos/module5/proto";
 
 service TokenService {
     rpc Validate(ValidateRequest) returns (ValidateResponse);
