@@ -7,6 +7,7 @@ option go_package = "github.com/baizhigit/go-grpc-demos/module6/proto";
 service ConfigService {
     rpc LongRunning(LongRunningRequest) returns (LongRunningResponse);
     rpc Flaky(FlakyRequest) returns (FlakyResponse);
+    rpc GetServerAddress(GetServerAddressRequest) returns (GetServerAddressResponse);
 }
 
 message LongRunningRequest {}
@@ -16,3 +17,9 @@ message LongRunningResponse {}
 message FlakyRequest {}
 
 message FlakyResponse {}
+
+message GetServerAddressRequest {}
+
+message GetServerAddressResponse {
+    string address = 1;
+}

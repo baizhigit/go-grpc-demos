@@ -19,8 +19,9 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	ConfigService_LongRunning_FullMethodName = "/config.ConfigService/LongRunning"
-	ConfigService_Flaky_FullMethodName       = "/config.ConfigService/Flaky"
+	ConfigService_LongRunning_FullMethodName      = "/config.ConfigService/LongRunning"
+	ConfigService_Flaky_FullMethodName            = "/config.ConfigService/Flaky"
+	ConfigService_GetServerAddress_FullMethodName = "/config.ConfigService/GetServerAddress"
 )
 
 // ConfigServiceClient is the client API for ConfigService service.
@@ -29,6 +30,7 @@ const (
 type ConfigServiceClient interface {
 	LongRunning(ctx context.Context, in *LongRunningRequest, opts ...grpc.CallOption) (*LongRunningResponse, error)
 	Flaky(ctx context.Context, in *FlakyRequest, opts ...grpc.CallOption) (*FlakyResponse, error)
+	GetServerAddress(ctx context.Context, in *GetServerAddressRequest, opts ...grpc.CallOption) (*GetServerAddressResponse, error)
 }
 
 type configServiceClient struct {
@@ -59,12 +61,23 @@ func (c *configServiceClient) Flaky(ctx context.Context, in *FlakyRequest, opts 
 	return out, nil
 }
 
+func (c *configServiceClient) GetServerAddress(ctx context.Context, in *GetServerAddressRequest, opts ...grpc.CallOption) (*GetServerAddressResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetServerAddressResponse)
+	err := c.cc.Invoke(ctx, ConfigService_GetServerAddress_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ConfigServiceServer is the server API for ConfigService service.
 // All implementations must embed UnimplementedConfigServiceServer
 // for forward compatibility.
 type ConfigServiceServer interface {
 	LongRunning(context.Context, *LongRunningRequest) (*LongRunningResponse, error)
 	Flaky(context.Context, *FlakyRequest) (*FlakyResponse, error)
+	GetServerAddress(context.Context, *GetServerAddressRequest) (*GetServerAddressResponse, error)
 	mustEmbedUnimplementedConfigServiceServer()
 }
 
@@ -80,6 +93,9 @@ func (UnimplementedConfigServiceServer) LongRunning(context.Context, *LongRunnin
 }
 func (UnimplementedConfigServiceServer) Flaky(context.Context, *FlakyRequest) (*FlakyResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method Flaky not implemented")
+}
+func (UnimplementedConfigServiceServer) GetServerAddress(context.Context, *GetServerAddressRequest) (*GetServerAddressResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetServerAddress not implemented")
 }
 func (UnimplementedConfigServiceServer) mustEmbedUnimplementedConfigServiceServer() {}
 func (UnimplementedConfigServiceServer) testEmbeddedByValue()                       {}
@@ -138,6 +154,24 @@ func _ConfigService_Flaky_Handler(srv interface{}, ctx context.Context, dec func
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ConfigService_GetServerAddress_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetServerAddressRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ConfigServiceServer).GetServerAddress(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ConfigService_GetServerAddress_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ConfigServiceServer).GetServerAddress(ctx, req.(*GetServerAddressRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // ConfigService_ServiceDesc is the grpc.ServiceDesc for ConfigService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -152,6 +186,10 @@ var ConfigService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Flaky",
 			Handler:    _ConfigService_Flaky_Handler,
+		},
+		{
+			MethodName: "GetServerAddress",
+			Handler:    _ConfigService_GetServerAddress_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

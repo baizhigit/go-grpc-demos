@@ -165,6 +165,86 @@ func (*FlakyResponse) Descriptor() ([]byte, []int) {
 	return file_proto_config_proto_rawDescGZIP(), []int{3}
 }
 
+type GetServerAddressRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetServerAddressRequest) Reset() {
+	*x = GetServerAddressRequest{}
+	mi := &file_proto_config_proto_msgTypes[4]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetServerAddressRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetServerAddressRequest) ProtoMessage() {}
+
+func (x *GetServerAddressRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_config_proto_msgTypes[4]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetServerAddressRequest.ProtoReflect.Descriptor instead.
+func (*GetServerAddressRequest) Descriptor() ([]byte, []int) {
+	return file_proto_config_proto_rawDescGZIP(), []int{4}
+}
+
+type GetServerAddressResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Address       string                 `protobuf:"bytes,1,opt,name=address,proto3" json:"address,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetServerAddressResponse) Reset() {
+	*x = GetServerAddressResponse{}
+	mi := &file_proto_config_proto_msgTypes[5]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetServerAddressResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetServerAddressResponse) ProtoMessage() {}
+
+func (x *GetServerAddressResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_config_proto_msgTypes[5]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetServerAddressResponse.ProtoReflect.Descriptor instead.
+func (*GetServerAddressResponse) Descriptor() ([]byte, []int) {
+	return file_proto_config_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *GetServerAddressResponse) GetAddress() string {
+	if x != nil {
+		return x.Address
+	}
+	return ""
+}
+
 var File_proto_config_proto protoreflect.FileDescriptor
 
 const file_proto_config_proto_rawDesc = "" +
@@ -173,10 +253,14 @@ const file_proto_config_proto_rawDesc = "" +
 	"\x12LongRunningRequest\"\x15\n" +
 	"\x13LongRunningResponse\"\x0e\n" +
 	"\fFlakyRequest\"\x0f\n" +
-	"\rFlakyResponse2\x8d\x01\n" +
+	"\rFlakyResponse\"\x19\n" +
+	"\x17GetServerAddressRequest\"4\n" +
+	"\x18GetServerAddressResponse\x12\x18\n" +
+	"\aaddress\x18\x01 \x01(\tR\aaddress2\xe4\x01\n" +
 	"\rConfigService\x12F\n" +
 	"\vLongRunning\x12\x1a.config.LongRunningRequest\x1a\x1b.config.LongRunningResponse\x124\n" +
-	"\x05Flaky\x12\x14.config.FlakyRequest\x1a\x15.config.FlakyResponseB2Z0github.com/baizhigit/go-grpc-demos/module6/protob\x06proto3"
+	"\x05Flaky\x12\x14.config.FlakyRequest\x1a\x15.config.FlakyResponse\x12U\n" +
+	"\x10GetServerAddress\x12\x1f.config.GetServerAddressRequest\x1a .config.GetServerAddressResponseB2Z0github.com/baizhigit/go-grpc-demos/module6/protob\x06proto3"
 
 var (
 	file_proto_config_proto_rawDescOnce sync.Once
@@ -190,20 +274,24 @@ func file_proto_config_proto_rawDescGZIP() []byte {
 	return file_proto_config_proto_rawDescData
 }
 
-var file_proto_config_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
+var file_proto_config_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
 var file_proto_config_proto_goTypes = []any{
-	(*LongRunningRequest)(nil),  // 0: config.LongRunningRequest
-	(*LongRunningResponse)(nil), // 1: config.LongRunningResponse
-	(*FlakyRequest)(nil),        // 2: config.FlakyRequest
-	(*FlakyResponse)(nil),       // 3: config.FlakyResponse
+	(*LongRunningRequest)(nil),       // 0: config.LongRunningRequest
+	(*LongRunningResponse)(nil),      // 1: config.LongRunningResponse
+	(*FlakyRequest)(nil),             // 2: config.FlakyRequest
+	(*FlakyResponse)(nil),            // 3: config.FlakyResponse
+	(*GetServerAddressRequest)(nil),  // 4: config.GetServerAddressRequest
+	(*GetServerAddressResponse)(nil), // 5: config.GetServerAddressResponse
 }
 var file_proto_config_proto_depIdxs = []int32{
 	0, // 0: config.ConfigService.LongRunning:input_type -> config.LongRunningRequest
 	2, // 1: config.ConfigService.Flaky:input_type -> config.FlakyRequest
-	1, // 2: config.ConfigService.LongRunning:output_type -> config.LongRunningResponse
-	3, // 3: config.ConfigService.Flaky:output_type -> config.FlakyResponse
-	2, // [2:4] is the sub-list for method output_type
-	0, // [0:2] is the sub-list for method input_type
+	4, // 2: config.ConfigService.GetServerAddress:input_type -> config.GetServerAddressRequest
+	1, // 3: config.ConfigService.LongRunning:output_type -> config.LongRunningResponse
+	3, // 4: config.ConfigService.Flaky:output_type -> config.FlakyResponse
+	5, // 5: config.ConfigService.GetServerAddress:output_type -> config.GetServerAddressResponse
+	3, // [3:6] is the sub-list for method output_type
+	0, // [0:3] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name
 	0, // [0:0] is the sub-list for extension extendee
 	0, // [0:0] is the sub-list for field type_name
@@ -220,7 +308,7 @@ func file_proto_config_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_proto_config_proto_rawDesc), len(file_proto_config_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   4,
+			NumMessages:   6,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
