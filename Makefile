@@ -1,6 +1,7 @@
 
 PROTOC_GEN_GO_VERSION := v1.36.11
 PROTOC_GEN_GO_GRPC_VERSION := v1.6.1
+MOCKERY_VERSION := v3.7.0
 
 MKFILE_PATH := $(abspath $(lastword $(MAKEFILE_LIST)))
 ROOT_DIR := $(dir $(MKFILE_PATH))
@@ -12,3 +13,8 @@ get-protoc-plugins:
 	echo '📦 Installing protoc-plugins...'
 	GOBIN=$(BIN_DIR) go install google.golang.org/protobuf/cmd/protoc-gen-go@$(PROTOC_GEN_GO_VERSION)
 	GOBIN=$(BIN_DIR) go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@$(PROTOC_GEN_GO_GRPC_VERSION)
+
+.PHONY: get-mockery
+get-mockery:
+	echo '📦 Installing mockery...'
+	GOBIN=$(BIN_DIR) go install github.com/vektra/mockery/v3@$(MOCKERY_VERSION)
