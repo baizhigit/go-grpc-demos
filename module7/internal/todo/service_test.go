@@ -11,6 +11,7 @@ import (
 	"github.com/baizhigit/go-grpc-demos/module7/internal/todo"
 	"github.com/baizhigit/go-grpc-demos/module7/proto"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -47,21 +48,27 @@ func newTestService(t *testing.T) (proto.TodoServiceServer, *store_mock.MockTask
 	return service, store
 }
 
+func requireStatus(t *testing.T, err error, code codes.Code, msg string) {
+	st, ok := status.FromError(err)
+	require.True(t, ok)
+
+	assert.Equal(t, code, st.Code())
+	assert.Equal(t, msg, st.Message())
+}
+
 func TestService_AddTask(t *testing.T) {
 
 	t.Run("returns INVALID_ARGUMENT status code when task is empty", func(t *testing.T) {
-		service, _ := newTestService(t)
+		service, store := newTestService(t)
 
 		res, err := service.AddTask(context.Background(), &proto.AddTaskRequest{Task: ""})
 
 		require.Error(t, err)
 		require.Nil(t, res)
 
-		statusErr, ok := status.FromError(err)
-		require.True(t, ok)
+		store.AssertNotCalled(t, "AddTask", mock.Anything)
 
-		assert.Equal(t, codes.InvalidArgument, statusErr.Code())
-		assert.Equal(t, "task cannot be empty", statusErr.Message())
+		requireStatus(t, err, codes.InvalidArgument, "task cannot be empty")
 	})
 
 	t.Run("returns INTERNAL status code when an error is returned from the store", func(t *testing.T) {
@@ -78,11 +85,7 @@ func TestService_AddTask(t *testing.T) {
 		require.Error(t, err)
 		require.Nil(t, res)
 
-		statusErr, ok := status.FromError(err)
-		require.True(t, ok)
-
-		assert.Equal(t, codes.Internal, statusErr.Code())
-		assert.Equal(t, fmt.Sprintf("failed to add task: %v", testErr), statusErr.Message())
+		requireStatus(t, err, codes.Internal, fmt.Sprintf("failed to add task: %v", testErr))
 	})
 
 	t.Run("returns task ID when task is stored successfully", func(t *testing.T) {
@@ -119,11 +122,7 @@ func TestService_CompleteTask(t *testing.T) {
 		require.Error(t, err)
 		require.Nil(t, res)
 
-		statusErr, ok := status.FromError(err)
-		require.True(t, ok)
-
-		assert.Equal(t, codes.NotFound, statusErr.Code())
-		assert.Equal(t, "task not found", statusErr.Message())
+		requireStatus(t, err, codes.NotFound, "task not found")
 	})
 
 	t.Run("returns INTERNAL status code when an error is returned from the store", func(t *testing.T) {
@@ -140,11 +139,7 @@ func TestService_CompleteTask(t *testing.T) {
 		require.Error(t, err)
 		require.Nil(t, res)
 
-		statusErr, ok := status.FromError(err)
-		require.True(t, ok)
-
-		assert.Equal(t, codes.Internal, statusErr.Code())
-		assert.Equal(t, fmt.Sprintf("failed to complete task: %v", testErr), statusErr.Message())
+		requireStatus(t, err, codes.Internal, fmt.Sprintf("failed to complete task: %v", testErr))
 	})
 
 	t.Run("returns successful response when a task is completed", func(t *testing.T) {
@@ -159,5 +154,49 @@ func TestService_CompleteTask(t *testing.T) {
 		res, err := service.CompleteTask(context.Background(), &proto.CompleteTaskRequest{Id: taskID})
 		require.NoError(t, err)
 		require.NotNil(t, res)
+	})
+}
+
+func TestService_ListTasks(t *testing.T) {
+	t.Run("returns INTERNAL status code when an error is returned from store", func(t *testing.T) {
+		service, todoStore := newTestService(t)
+
+		testErr := errors.New("some error")
+
+		todoStore.On("ListTasks").
+			Return(nil, testErr).
+			Once()
+
+		res, err := service.ListTasks(context.Background(), &proto.ListTasksRequest{})
+		require.Error(t, err)
+		require.Nil(t, res)
+
+		requireStatus(t, err, codes.Internal, fmt.Sprintf("failed to list tasks: %v", testErr))
+	})
+
+	t.Run("returns a list of tasks retrieved from store", func(t *testing.T) {
+		service, todoStore := newTestService(t)
+
+		tasks := []todostore.Task{
+			{ID: "1", Task: "wake up"},
+			{ID: "2", Task: "walk the dog"},
+			{ID: "3", Task: "have breakfast"},
+		}
+
+		todoStore.On("ListTasks").
+			Return(tasks, nil).
+			Once()
+
+		res, err := service.ListTasks(context.Background(), &proto.ListTasksRequest{})
+		require.NoError(t, err)
+		require.NotNil(t, res)
+		require.Len(t, res.GetTasks(), 3)
+
+		assert.Equal(t, "1", res.Tasks[0].Id)
+		assert.Equal(t, "wake up", res.Tasks[0].Task)
+		assert.Equal(t, "2", res.Tasks[1].Id)
+		assert.Equal(t, "walk the dog", res.Tasks[1].Task)
+		assert.Equal(t, "3", res.Tasks[2].Id)
+		assert.Equal(t, "have breakfast", res.Tasks[2].Task)
 	})
 }
