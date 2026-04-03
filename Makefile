@@ -2,6 +2,7 @@
 PROTOC_GEN_GO_VERSION := v1.36.11
 PROTOC_GEN_GO_GRPC_VERSION := v1.6.1
 MOCKERY_VERSION := v3.7.0
+BUF_VERSION := v1.67.0
 
 MKFILE_PATH := $(abspath $(lastword $(MAKEFILE_LIST)))
 ROOT_DIR := $(dir $(MKFILE_PATH))
@@ -18,3 +19,8 @@ get-protoc-plugins:
 get-mockery:
 	echo '📦 Installing mockery...'
 	GOBIN=$(BIN_DIR) go install github.com/vektra/mockery/v3@$(MOCKERY_VERSION)
+
+.PHONY: get-buf
+get-buf:
+	echo '📦 Installing buf...'
+	GOBIN=$(BIN_DIR) go install github.com/bufbuild/buf/cmd/buf@$(BUF_VERSION)
