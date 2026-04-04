@@ -24,18 +24,14 @@ plugins:
     opt:
       - paths=source_relative
 
-  # # connect web
-  # - remote: buf.build/connectrpc/es:v1.4.0
-  #   out: client/src/proto
-  #   opt:
-  #     - target=ts
-  #     - import_extension=.ts
-  # # dependencies
-  # - remote: buf.build/bufbuild/es
-  #   out: client/src/proto
-  #   opt:
-  #     - target=ts
-  #     - import_extension=.ts
+  # connect web
+  - remote: buf.build/bufbuild/es:v2.11.0
+    out: client/proto
+    include_imports: true
+    opt:
+      - target=ts
+      # - import_extension=.ts
+      - import_extension=none
 
 inputs:
   - directory: proto
